@@ -1,29 +1,31 @@
 import './normalize.css';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import styles from './App.module.less';
-import { useTTSInit, useTTSStore } from './hooks/useTTS';
+import Conversation from './components/Conversation';
+import Home from './components/Home';
+import PageContainer from './components/PageContainer';
+import { useTTSInit } from './hooks/useTTS';
+import { AppState, useSettingStore } from './store/setting';
+import { useTTSStore } from './store/tts';
 
 function App() {
-  const speak = useTTSStore((state) => state.speak);
-  const speech = () => {
-    speak('如何学习 rust ', () => {
-      console.log('speak done');
-    });
-  };
+  const { appState } = useSettingStore();
   const init = useTTSInit();
 
   useEffect(() => {
     init();
   }, []);
 
-  return (
-    <div className={styles.root}>
-      <button onClick={speech}>speech</button>
-      <h1>123</h1>
-    </div>
-  );
+  const getApp = () => {
+    if (appState === AppState.conversation) {
+      return <Conversation />;
+    } else {
+      return <Home />;
+    }
+  };
+
+  return <PageContainer>{getApp()}</PageContainer>;
 }
 
 export default App;
