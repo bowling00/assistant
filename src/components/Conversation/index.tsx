@@ -28,40 +28,8 @@ const Conversation: FC<ConversationProps> = ({ projectId }) => {
   });
   const [chatList, setChatList] = useState<Partial<Message>[]>([
     {
-      content: '我是聪明的 JS Siri',
+      content: '我叫 JS Siri，是你的 AI 助理',
       role: MessageRole.system,
-    },
-    {
-      content: '我是聪明的 人类',
-      role: MessageRole.human,
-    },
-    {
-      content: '我是聪明的 AI',
-      role: MessageRole.ai,
-    },
-    {
-      content: '我是聪明的 JS Siri',
-      role: MessageRole.system,
-    },
-    {
-      content: '我是聪明的 人类',
-      role: MessageRole.human,
-    },
-    {
-      content: '我是聪明的 AI',
-      role: MessageRole.ai,
-    },
-    {
-      content: '我是聪明的 JS Siri',
-      role: MessageRole.system,
-    },
-    {
-      content: '我是聪明的 人类',
-      role: MessageRole.human,
-    },
-    {
-      content: '我是聪明的 AI',
-      role: MessageRole.ai,
     },
   ]);
   const [content, setContent] = useState('');
