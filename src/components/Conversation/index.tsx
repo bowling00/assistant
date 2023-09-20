@@ -1,6 +1,7 @@
-import { IconSend } from '@douyinfe/semi-icons';
-import { Button, Input } from '@douyinfe/semi-ui';
-import { FC, useMemo, useState } from 'react';
+import { IconMicrophone, IconSend } from '@douyinfe/semi-icons';
+import { Button, Input, Spin } from '@douyinfe/semi-ui';
+import ClassNames from 'classnames';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import {
   conversation,
@@ -9,8 +10,10 @@ import {
   similaritySearchResponseItem,
 } from '../../api/conversation';
 import { similaritySearchFromDocs } from '../../api/project';
+import useBrowserSpeechToText from '../../hooks/BrowserSpeechToText';
 import { useTTSStore } from '../../store/tts';
 import { ToastInfo, ToastSuccess } from '../../utils/common';
+import Layout from '../Layout';
 import styles from './index.module.less';
 
 interface ConversationProps {
@@ -19,9 +22,46 @@ interface ConversationProps {
 
 const Conversation: FC<ConversationProps> = ({ projectId }) => {
   const [loading, setLoading] = useState(false);
+  const language = 'zh-CN';
+  const { transcript, isListening, setIsListening } = useBrowserSpeechToText({
+    language,
+  });
   const [chatList, setChatList] = useState<Partial<Message>[]>([
     {
       content: '我是聪明的 JS Siri',
+      role: MessageRole.system,
+    },
+    {
+      content: '我是聪明的 人类',
+      role: MessageRole.human,
+    },
+    {
+      content: '我是聪明的 AI',
+      role: MessageRole.ai,
+    },
+    {
+      content: '我是聪明的 JS Siri',
+      role: MessageRole.system,
+    },
+    {
+      content: '我是聪明的 人类',
+      role: MessageRole.human,
+    },
+    {
+      content: '我是聪明的 AI',
+      role: MessageRole.ai,
+    },
+    {
+      content: '我是聪明的 JS Siri',
+      role: MessageRole.system,
+    },
+    {
+      content: '我是聪明的 人类',
+      role: MessageRole.human,
+    },
+    {
+      content: '我是聪明的 AI',
+      role: MessageRole.ai,
     },
   ]);
   const [content, setContent] = useState('');
@@ -29,25 +69,42 @@ const Conversation: FC<ConversationProps> = ({ projectId }) => {
   const speak = useTTSStore((state) => state.speak);
 
   const getMessageList = useMemo(() => {
-    return chatList
-      .filter((item) => item.role !== MessageRole.system)
-      .map((message) => {
-        return (
-          <div className={styles.message} key={message.createdAt}>
-            <div className={styles.messageContent}>
-              {message.role && `${message.role} :`} {message.content}
+    return (
+      chatList
+        // .filter((item) => item.role !== MessageRole.system)
+        .map((message) => {
+          return (
+            <div className={styles.message} key={message.createdAt}>
+              <div
+                className={ClassNames({
+                  [styles.messageContainer]: true,
+                  [styles.systemMessage]: message.role === MessageRole.system,
+                  [styles.aiMessage]: message.role === MessageRole.ai,
+                  [styles.humanMessage]: message.role === MessageRole.human,
+                })}
+              >
+                <div
+                  className={ClassNames({
+                    [styles.messageContent]: true,
+                    [styles.systemContent]: message.role === MessageRole.system,
+                    [styles.aiContent]: message.role === MessageRole.ai,
+                    [styles.humanContent]: message.role === MessageRole.human,
+                  })}
+                >
+                  {message.content}
+                </div>
+              </div>
             </div>
-            <div className={styles.messageTime}>{message.createdAt}</div>
-          </div>
-        );
-      });
+          );
+        })
+    );
   }, [chatList.length]);
 
   const docSearch = async () => {
     if (!projectId) return [];
 
     const searchVectorFromDocsFunc = (): Promise<similaritySearchResponseItem[]> => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         similaritySearchFromDocs({ content, projectId, size })
           .then((res) => {
             resolve(res.data);
@@ -107,20 +164,48 @@ const Conversation: FC<ConversationProps> = ({ projectId }) => {
     });
   };
 
+  const speechToText = () => {
+    setIsListening(!isListening);
+  };
+
+  useEffect(() => {
+    setContent(transcript);
+  }, [transcript]);
+
   return (
-    <div className={styles.chatComponent}>
-      <div className={styles.messageList}>{getMessageList}</div>
-      <div className={styles.sendContainer}>
-        <Input showClear value={content} onChange={setContent}></Input>
-        <Button
-          icon={<IconSend />}
-          theme="solid"
-          style={{ marginRight: 10 }}
-          onClick={sendMessage}
-          loading={loading}
-        />
+    <Layout>
+      <div className={styles.chatComponent}>
+        <div className={styles.header}>Js Siri</div>
+        <div className={styles.messageList}>{getMessageList}</div>
+        <div className={styles.sendContainer}>
+          <Input
+            showClear
+            value={content}
+            onChange={setContent}
+            className={styles.sendInput}
+          ></Input>
+          <Button
+            icon={<IconMicrophone />}
+            theme="solid"
+            onClick={speechToText}
+            // loading={isListening}
+            className={styles.sendBtn}
+            size="small"
+            disabled={loading}
+          >
+            {isListening && <Spin />}
+          </Button>
+          <Button
+            icon={<IconSend />}
+            theme="solid"
+            onClick={sendMessage}
+            loading={loading}
+            className={styles.sendBtn}
+            size="small"
+          />
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

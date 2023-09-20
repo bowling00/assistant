@@ -1,8 +1,9 @@
 * {
-  box-sizing: content-box;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
@@ -17,6 +18,7 @@
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
+  font-size: 14px;
 }
 
 /* Sections

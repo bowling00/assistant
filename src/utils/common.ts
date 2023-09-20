@@ -46,3 +46,8 @@ export const handleCopy = (text: string) => {
     },
   );
 };
+
+export function getEnvironmentVariable(name: string): string {
+  const environment_variable_name = 'VITE_' + name;
+  return import.meta.env[environment_variable_name];
+}

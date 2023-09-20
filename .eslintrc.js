@@ -48,5 +48,6 @@ module.exports = {
         aspects: ['invalidHref', 'preferButton'],
       },
     ],
+    '@typescript-eslint/ban-ts-comment': 0,
   },
 };

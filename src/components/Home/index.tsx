@@ -3,6 +3,7 @@ import { Button } from '@douyinfe/semi-ui';
 import { AppState, useSettingStore } from '../../store/setting';
 import { Card } from '../Card';
 import Header from '../Header';
+import Layout from '../Layout';
 import styles from './index.module.less';
 
 const Home = () => {
@@ -23,8 +24,10 @@ const Home = () => {
   const getCardFooter = () => {
     return (
       <footer className={styles.cardFooter}>
-        <Button>设置私有私有知识库</Button>
-        <Button onClick={gotoConversation}>开始对话</Button>
+        <Button size="small">设置</Button>
+        <Button size="small" type="primary" theme="solid" onClick={gotoConversation}>
+          开始对话
+        </Button>
       </footer>
     );
   };
@@ -34,14 +37,15 @@ const Home = () => {
   };
 
   return (
-    <div className={styles.homeContainer}>
-      <Header />
-      <div className={styles.content}>
-        <div className={styles.card}>
-          <Card Content={getCardContent()} Footer={getCardFooter()} />
+    <Layout>
+      <div className={styles.homeContainer}>
+        <div className={styles.content}>
+          <div className={styles.card}>
+            <Card Content={getCardContent()} Footer={getCardFooter()} />
+          </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

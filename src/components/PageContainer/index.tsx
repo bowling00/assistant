@@ -2,11 +2,11 @@ import { FC } from 'react';
 
 import styles from './index.module.less';
 
-interface PageContainerIF {
+interface PageContainerProps {
   children: React.ReactNode;
 }
 
-const PageContainer: FC<PageContainerIF> = ({ children }) => {
+const PageContainer: FC<PageContainerProps> = ({ children }) => {
   return <div className={styles.pageContainer}>{children}</div>;
 };
 

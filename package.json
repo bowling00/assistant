@@ -13,6 +13,7 @@
   "dependencies": {
     "@douyinfe/semi-ui": "^2.43.2",
     "axios": "^1.5.0",
+    "classnames": "^2.3.2",
     "microsoft-cognitiveservices-speech-sdk": "^1.32.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
