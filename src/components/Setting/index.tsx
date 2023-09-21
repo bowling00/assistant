@@ -6,13 +6,17 @@ import { DocIF, useSettingStore } from '../../store/setting';
 import { ToastSuccess } from '../../utils/common';
 import styles from './index.module.less';
 
+interface DocModal {
+  projectId: string;
+}
+
 export const Setting = () => {
   const { setting, updateSetting } = useSettingStore();
   const { siriMode, autoSpeech, speech, maxContext, doc } = setting;
   const [docModalVisible, setDocModalVisible] = useState(false);
   const [docModalLoading, setDocModalLoading] = useState(false);
 
-  const docBindHandle = (values: { projectId: string }) => {
+  const docBindHandle = (values: DocModal) => {
     const { projectId } = values;
     setDocModalLoading(true);
     getProjectDetail(projectId)
@@ -98,7 +102,10 @@ export const Setting = () => {
         <div className={styles.settingItem}>
           <div className={styles.title}>最长上下文条数</div>
           <div className={styles.content}>
-            <div className={styles.maxContext}>{maxContext}</div>
+            <div className={styles.maxContext}>
+              {maxContext}
+              <Button>修改</Button>
+            </div>
           </div>
         </div>
       </div>
@@ -112,7 +119,7 @@ export const Setting = () => {
         zIndex={99999}
       >
         <Form
-          onSubmit={(values) => docBindHandle(values)}
+          onSubmit={(values: DocModal) => docBindHandle(values)}
           style={{
             padding: '0 10px 30px 10px',
           }}

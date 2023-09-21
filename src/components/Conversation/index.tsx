@@ -140,7 +140,10 @@ const Conversation = () => {
           { content: content, role: MessageRole.human },
         ];
         setChatList([...chatList, ...svaeMessages, result]);
-        speech(result.content);
+        const autoSpeech = setting.autoSpeech;
+        if (autoSpeech) {
+          speech(result.content);
+        }
         updateLive2dChatAnswer(result.content);
       })
       .finally(() => {

@@ -1,5 +1,5 @@
 export const showLive2dGirls = () => {
-  const live2dDom = document.querySelector('#waifu');
+  const live2dDom = document.querySelector('#waifu') as HTMLElement;
 
   if (live2dDom) {
     live2dDom.style.visibility = 'visible';
@@ -7,7 +7,7 @@ export const showLive2dGirls = () => {
 };
 
 export const hideLive2dGirls = () => {
-  const live2dDom = document.querySelector('#waifu');
+  const live2dDom = document.querySelector('#waifu') as HTMLElement;
 
   if (live2dDom) {
     live2dDom.style.visibility = 'hidden';
