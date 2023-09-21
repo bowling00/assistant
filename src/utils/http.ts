@@ -5,7 +5,11 @@ import { ToastError } from './common';
 const http = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL || process.env.VITE_BASE_URL,
 });
-console.info('import.meta.env.VITE_BASE_URL', import.meta.env.VITE_BASE_URL);
+console.info(
+  'import.meta.env.VITE_BASE_URL',
+  import.meta.env.VITE_BASE_URL,
+  process.env.VITE_BASE_URL,
+);
 
 http.interceptors.request.use(
   (config) => {
