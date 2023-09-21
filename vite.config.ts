@@ -12,10 +12,4 @@ export default defineConfig({
       },
     },
   },
-  define: {
-    'import.meta.env.VITE_BASE_URL': JSON.stringify(process.env.VITE_BASE_URL),
-    'import.meta.env.VITE_PROXY_URL': JSON.stringify(process.env.VITE_PROXY_URL),
-    'import.meta.env.VITE_AZURE_KEY': JSON.stringify(process.env.VITE_AZURE_KEY),
-    'import.meta.env.VITE_REGION': JSON.stringify(process.env.VITE_REGION),
-  },
 });

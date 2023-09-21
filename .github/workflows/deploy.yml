@@ -26,6 +26,10 @@ jobs:
         run: yarn build
         env:
           NODE_ENV: production
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+          VITE_PROXY_URL: ${{ secrets.VITE_PROXY_URL }}
+          VITE_AZURE_KEY: ${{ secrets.VITE_AZURE_KEY }}
+          VITE_REGION: ${{ secrets.VITE_REGION }}
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
