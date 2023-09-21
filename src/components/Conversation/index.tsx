@@ -16,6 +16,7 @@ import useBrowserSpeechToText, {
 import { useSettingStore } from '../../store/setting';
 import { useTTSStore } from '../../store/tts';
 import { handleCopy } from '../../utils/common';
+import { updateLive2dChatAnswer } from '../../utils/live2d';
 import Layout from '../Layout';
 import styles from './index.module.less';
 
@@ -140,6 +141,7 @@ const Conversation = () => {
         ];
         setChatList([...chatList, ...svaeMessages, result]);
         speech(result.content);
+        updateLive2dChatAnswer(result.content);
       })
       .finally(() => {
         setContent('');
