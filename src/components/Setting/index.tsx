@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { getProjectDetail } from '../../api/project';
 import { DocIF, useSettingStore } from '../../store/setting';
-import { ToastSuccess, ToastWaring } from '../../utils/common';
+import { ToastError, ToastSuccess, ToastWaring } from '../../utils/common';
 import styles from './index.module.less';
 
 interface DocModal {
@@ -16,25 +16,30 @@ export const Setting = () => {
   const [docModalVisible, setDocModalVisible] = useState(false);
   const [docModalLoading, setDocModalLoading] = useState(false);
   const [maxContentInputValue, setMaxContentInputValue] = useState(maxContext);
-
   const docBindHandle = (values: DocModal) => {
     const { projectId } = values;
     setDocModalLoading(true);
     getProjectDetail(projectId)
       .then((res) => {
-        console.log(res.data);
-        const { id, description, name } = res.data;
-        const doc: DocIF = {
-          id,
-          description,
-          name,
-        };
-        updateSetting({
-          ...setting,
-          doc,
-        });
-        setDocModalVisible(false);
-        ToastSuccess('绑定成功');
+        if (res.data) {
+          const { id, description, name } = res.data;
+          const doc: DocIF = {
+            id,
+            description,
+            name,
+          };
+          updateSetting({
+            ...setting,
+            doc,
+          });
+          setDocModalVisible(false);
+          ToastSuccess('绑定成功');
+        } else {
+          return Promise.reject(res);
+        }
+      })
+      .catch(() => {
+        ToastError('绑定失败，未查询到该应用');
       })
       .finally(() => {
         setDocModalLoading(false);
@@ -150,20 +155,24 @@ export const Setting = () => {
             <>
               <Form.Input
                 field="projectId"
-                label="知识库 ID"
+                label="应用 ID"
                 initValue={doc?.id || ''}
                 style={{ width: '100%' }}
-                placeholder="请输入知识库 ID"
-                rules={[{ required: true, message: '请输入知识库 ID' }]}
+                placeholder="请输入应用 ID"
+                rules={[{ required: true, message: '请输入应用 ID' }]}
               ></Form.Input>
               <div className={styles.docModalItem}>
-                <div className={styles.title}>知识库名字</div>
+                <div className={styles.title}>如何拥有应用 ID ?</div>
                 <div className={styles.name}>
-                  <Popover content={doc?.description}>
-                    {docModalLoading
-                      ? '绑定中...'
-                      : doc?.name || '输入知识库 ID 后点击绑定进行查询'}
-                  </Popover>
+                  请在
+                  <a
+                    href="https://docs-copilot.devlink.wiki/"
+                    target="_black"
+                    style={{ fontWeight: 600, margin: '0 .5rem' }}
+                  >
+                    docs-copilot
+                  </a>
+                  中创建「应用」和「知识库」，并在应用中绑定知识库
                 </div>
               </div>
               <div
