@@ -126,7 +126,9 @@ const Conversation = () => {
       role: MessageRole.human,
     };
     const systemMessages = await docSearch();
-    const messages = [...chatList.slice(1), ...systemMessages, humanMessage];
+    const messages = [...chatList.slice(1), ...systemMessages, humanMessage].slice(
+      -setting.maxContext,
+    );
     const projectId = setting?.doc?.id;
     conversation({ messages, projectId })
       .then((res) => {
@@ -179,14 +181,13 @@ const Conversation = () => {
             className={styles.sendInput}
           ></Input>
           <Button
-            icon={<IconMicrophone />}
             theme="solid"
             onClick={speechToText}
-            // loading={isListening}
             className={styles.sendBtn}
             size="small"
             disabled={loading}
           >
+            <IconMicrophone />
             {isListening && <>录音中</>}
           </Button>
           <Button
