@@ -360,12 +360,16 @@ template {
 #waifu {
   visibility: hidden;
   z-index: 10000;
+  width: 100vw;
 }
 
 #waifu-tips {
   position: absolute;
   opacity: 1;
-  left: 100%;
+  left: 300px;
+  width: unset;
+  min-width: 250px;
+  max-width: 60%;
 }
 
 .answer-btn {
