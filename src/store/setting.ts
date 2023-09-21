@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { hideLive2dGirls, showLive2dGirls } from '../utils/live2d';
 
 export enum AppState {
   welcome,
@@ -39,6 +40,13 @@ export const useSettingStore = create<SettingStore>((set) => ({
     set({ appState });
   },
   updateSetting: (setting) => {
+    console.log('setting>>>>', setting);
     set({ setting });
+
+    if (setting.siriMode) {
+      showLive2dGirls();
+    } else {
+      hideLive2dGirls();
+    }
   },
 }));

@@ -1,0 +1,93 @@
+.chatComponent {
+  padding-bottom: 4rem;
+  position: relative;
+  height: 80px;
+}
+.chatComponent .header {
+  height: 3rem;
+  padding: 0 2rem;
+  border-bottom-width: 1px;
+  border-color: #f3f4f6;
+  line-height: 3rem;
+  border-style: solid;
+}
+.chatComponent .messageList {
+  height: 300px;
+  overflow-y: auto;
+  padding: 1rem 0 2rem 0;
+}
+.chatComponent .messageList .message {
+  display: flex;
+}
+.chatComponent .messageList .message .messageContainer {
+  display: flex;
+  font-size: 1.2rem;
+  width: 100%;
+  margin: 1rem;
+  position: relative;
+}
+.chatComponent .messageList .message .messageTime {
+  font-size: 1rem;
+}
+.chatComponent .messageList .message .systemMessage,
+.chatComponent .messageList .message .aiMessage {
+  justify-content: flex-start;
+}
+.chatComponent .messageList .message .humanMessage {
+  justify-content: flex-end;
+}
+.chatComponent .messageList .message .messageContent {
+  border-radius: 10px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.chatComponent .messageList .message .systemContent,
+.chatComponent .messageList .message .aiContent {
+  background-color: #f3f4f6;
+  justify-content: flex-start;
+}
+.chatComponent .messageList .message .humanContent {
+  background-color: #e4effc;
+  justify-content: flex-end;
+}
+.chatComponent .messageList .message .messageControll {
+  position: absolute;
+  display: flex;
+  gap: 5px;
+  bottom: -27px;
+}
+.chatComponent .messageList .message .messageControll button {
+  border-radius: 5px;
+}
+.chatComponent .messageList .message .systemControll,
+.chatComponent .messageList .message .aiControll {
+  left: 2px;
+}
+.chatComponent .messageList .message .humanControll {
+  right: 2px;
+}
+.chatComponent .sendContainer {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem;
+  gap: 0.5rem;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top-width: 1px;
+  border-color: #f3f4f6;
+  border-style: solid;
+  background-color: white;
+  height: 4rem;
+  padding-top: 0.75rem;
+}
+.chatComponent .sendContainer .sendInput,
+.chatComponent .sendContainer .sendBtn {
+  height: 2.5rem;
+}
+.chatComponent .sendContainer .sendBtn {
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+}

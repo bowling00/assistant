@@ -356,3 +356,21 @@ template {
 [hidden] {
   display: none;
 }
+
+#waifu {
+  visibility: hidden;
+  z-index: 10000;
+}
+
+#waifu-tips {
+  position: absolute;
+  opacity: 1;
+  left: 100%;
+}
+
+.answer-btn {
+  width: 100px;
+  height: 50px;
+  background: slateblue;
+  color: white;
+}

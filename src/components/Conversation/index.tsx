@@ -17,6 +17,7 @@ import { useTTSStore } from '../../store/tts';
 import { handleCopy, ToastInfo, ToastSuccess } from '../../utils/common';
 import Layout from '../Layout';
 import styles from './index.module.less';
+import { updateLive2dChatAnswer } from '../../utils/live2d';
 
 interface ConversationProps {
   projectId?: string;
@@ -141,6 +142,7 @@ const Conversation: FC<ConversationProps> = ({ projectId }) => {
         ];
         setChatList([...chatList, ...svaeMessages, result]);
         speech(result.content);
+        updateLive2dChatAnswer(result.content);
       })
       .finally(() => {
         setContent('');
