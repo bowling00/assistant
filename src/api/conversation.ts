@@ -15,6 +15,7 @@ export interface Message {
 
 interface ChatBody {
   messages: Partial<Message>[];
+  projectId?: string;
 }
 
 export interface similaritySearchResponseItem {

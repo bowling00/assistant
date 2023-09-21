@@ -19,3 +19,8 @@ export const similaritySearchFromDocs = (params: SimilaritySearchFromDocsParams)
     },
   });
 };
+
+export const getProjectDetail = (projectId: string) =>
+  http({
+    url: `/project/${projectId}/detail`,
+  });

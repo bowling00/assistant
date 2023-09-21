@@ -13,16 +13,13 @@ import { similaritySearchFromDocs } from '../../api/project';
 import useBrowserSpeechToText, {
   SupportedLanguages,
 } from '../../hooks/BrowserSpeechToText';
+import { useSettingStore } from '../../store/setting';
 import { useTTSStore } from '../../store/tts';
-import { handleCopy, ToastInfo, ToastSuccess } from '../../utils/common';
+import { handleCopy } from '../../utils/common';
 import Layout from '../Layout';
 import styles from './index.module.less';
 
-interface ConversationProps {
-  projectId?: string;
-}
-
-const Conversation: FC<ConversationProps> = ({ projectId }) => {
+const Conversation = () => {
   const [loading, setLoading] = useState(false);
   const { transcript, isListening, setIsListening } = useBrowserSpeechToText({
     language: SupportedLanguages['zh-CN'],
@@ -34,70 +31,71 @@ const Conversation: FC<ConversationProps> = ({ projectId }) => {
     },
   ]);
   const [content, setContent] = useState('');
-  const size = 2;
   const speak = useTTSStore((state) => state.speak);
-
+  const { setting } = useSettingStore();
   const getMessageList = useMemo(() => {
-    return (
-      chatList
-        // .filter((item) => item.role !== MessageRole.system)
-        .map((message) => {
-          return (
-            <div className={styles.message} key={message.createdAt}>
+    return chatList
+      .filter((item) => item.role !== MessageRole.system)
+      .map((message) => {
+        return (
+          <div className={styles.message} key={message.createdAt}>
+            <div
+              className={ClassNames({
+                [styles.messageContainer]: true,
+                [styles.systemMessage]: message.role === MessageRole.system,
+                [styles.aiMessage]: message.role === MessageRole.ai,
+                [styles.humanMessage]: message.role === MessageRole.human,
+              })}
+            >
               <div
                 className={ClassNames({
-                  [styles.messageContainer]: true,
-                  [styles.systemMessage]: message.role === MessageRole.system,
-                  [styles.aiMessage]: message.role === MessageRole.ai,
-                  [styles.humanMessage]: message.role === MessageRole.human,
+                  [styles.messageContent]: true,
+                  [styles.systemContent]: message.role === MessageRole.system,
+                  [styles.aiContent]: message.role === MessageRole.ai,
+                  [styles.humanContent]: message.role === MessageRole.human,
                 })}
               >
-                <div
-                  className={ClassNames({
-                    [styles.messageContent]: true,
-                    [styles.systemContent]: message.role === MessageRole.system,
-                    [styles.aiContent]: message.role === MessageRole.ai,
-                    [styles.humanContent]: message.role === MessageRole.human,
-                  })}
-                >
-                  {message.content}
-                </div>
-                <div
-                  className={ClassNames({
-                    [styles.messageControll]: true,
-                    [styles.systemControll]: message.role === MessageRole.system,
-                    [styles.aiControll]: message.role === MessageRole.ai,
-                    [styles.humanControll]: message.role === MessageRole.human,
-                  })}
-                >
-                  <Button
-                    icon={<IconMicrophone size="small" />}
-                    className={styles.sendBtn}
-                    onClick={() => speak(message.content as string)}
-                    size="small"
-                    disabled={loading}
-                  />
-                  <Button
-                    icon={<IconCopy size="small" />}
-                    className={styles.sendBtn}
-                    onClick={() => handleCopy(message.content as string)}
-                    size="small"
-                    disabled={loading}
-                  />
-                </div>
+                {message.content}
+              </div>
+              <div
+                className={ClassNames({
+                  [styles.messageControll]: true,
+                  [styles.systemControll]: message.role === MessageRole.system,
+                  [styles.aiControll]: message.role === MessageRole.ai,
+                  [styles.humanControll]: message.role === MessageRole.human,
+                })}
+              >
+                <Button
+                  icon={<IconMicrophone size="small" />}
+                  className={styles.sendBtn}
+                  onClick={() => speak(message.content as string)}
+                  size="small"
+                  disabled={loading}
+                />
+                <Button
+                  icon={<IconCopy size="small" />}
+                  className={styles.sendBtn}
+                  onClick={() => handleCopy(message.content as string)}
+                  size="small"
+                  disabled={loading}
+                />
               </div>
             </div>
-          );
-        })
-    );
-  }, [chatList.length]);
+          </div>
+        );
+      });
+  }, [chatList.length, loading]);
 
   const docSearch = async () => {
-    if (!projectId) return [];
-
+    const id = setting?.doc?.id;
+    const name = setting?.doc?.name;
+    if (!id && !name) {
+      return [];
+    }
+    const size = 2;
     const searchVectorFromDocsFunc = (): Promise<similaritySearchResponseItem[]> => {
       return new Promise((resolve) => {
-        similaritySearchFromDocs({ content, projectId, size })
+        similaritySearchFromDocs({ content, projectId: id as string, size })
           .then((res) => {
             resolve(res.data);
           })
@@ -128,7 +126,8 @@ const Conversation: FC<ConversationProps> = ({ projectId }) => {
     };
     const systemMessages = await docSearch();
     const messages = [...chatList.slice(1), ...systemMessages, humanMessage];
-    conversation({ messages })
+    const projectId = setting?.doc?.id;
+    conversation({ messages, projectId })
       .then((res) => {
         const result = {
           content: res.data,
