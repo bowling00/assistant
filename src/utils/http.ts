@@ -3,9 +3,9 @@ import axios from 'axios';
 import { ToastError } from './common';
 
 const http = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL || process.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
 });
-console.info('env', import.meta.env.VITE_BASE_URL, process.env.VITE_BASE_URL);
+console.info('env', import.meta.env.VITE_BASE_URL);
 
 http.interceptors.request.use(
   (config) => {

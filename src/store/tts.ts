@@ -10,9 +10,9 @@ import { createWithEqualityFn } from 'zustand/traditional';
 type AutoPlay = '0' | '1';
 export type TTSRate = 'x-slow' | 'slow' | 'medium' | 'fast' | 'x-fast';
 
-const TTS_KEY = import.meta.env.VITE_AZURE_KEY || process.env.VITE_AZURE_KEY || '';
-const TTS_REGION = import.meta.env.VITE_REGION || process.env.VITE_REGION || '';
-const PROXY_URL = import.meta.env.VITE_PROXY_URL || process.env.VITE_PROXY_URL || '';
+const TTS_KEY = import.meta.env.VITE_AZURE_KEY || '';
+const TTS_REGION = import.meta.env.VITE_REGION || '';
+const PROXY_URL = import.meta.env.VITE_PROXY_URL || '';
 
 interface TTSStore {
   voice: string;
