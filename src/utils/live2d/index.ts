@@ -1,5 +1,5 @@
 export const showLive2dGirls = () => {
-  const live2dDom = document.querySelector('#waifu');
+  const live2dDom = document.querySelector('#waifu') as HTMLElement;
 
   if (live2dDom) {
     live2dDom.style.visibility = 'visible';
@@ -7,7 +7,7 @@ export const showLive2dGirls = () => {
 };
 
 export const hideLive2dGirls = () => {
-  const live2dDom = document.querySelector('#waifu');
+  const live2dDom = document.querySelector('#waifu') as HTMLElement;
 
   if (live2dDom) {
     live2dDom.style.visibility = 'hidden';
@@ -16,7 +16,7 @@ export const hideLive2dGirls = () => {
 
 /**
  * [更新回答框内容]
- * @param _answer 
+ * @param _answer
  */
 export const updateLive2dChatAnswer = (_answer: string) => {
   const answerBox: HTMLElement | null = document.querySelector('#waifu-tips');

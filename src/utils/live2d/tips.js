@@ -127,6 +127,7 @@ function loadWidget(config) {
       }
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const devtools = () => {};
     console.log('%c', devtools);
     devtools.toString = () => {

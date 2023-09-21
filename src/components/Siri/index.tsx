@@ -141,5 +141,5 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
         />
       </div>
     </div>
-  )
+  );
 };

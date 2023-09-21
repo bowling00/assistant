@@ -10,19 +10,13 @@
   "click": [
     {
       "selector": "#live2d",
-      "text": [
-      ]
+      "text": []
     }
   ],
-  "seasons": [
-  ],
-  "time": [
-  ],
+  "seasons": [],
+  "time": [],
   "message": {
-    "default": [
-      "好久不见，日子过得好快呢……",
-      "嗨～快来逗我玩吧！"
-    ],
+    "default": ["好久不见，日子过得好快呢……", "嗨～快来逗我玩吧！"],
     "console": "哈哈，你打开了控制台，是想要看看我的小秘密吗？",
     "copy": "你都复制了些什么呀！",
     "visibilitychange": "哇，你终于回来了～这次想知道什么？"
