@@ -24,8 +24,8 @@ const Home = () => {
   const getCardFooter = () => {
     return (
       <footer className={styles.cardFooter}>
-        <Button size="small">设置</Button>
-        <Button size="small" type="primary" theme="solid" onClick={gotoConversation}>
+        <Button>设置</Button>
+        <Button type="primary" theme="solid" onClick={gotoConversation}>
           开始对话
         </Button>
       </footer>

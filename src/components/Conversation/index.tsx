@@ -1,4 +1,4 @@
-import { IconMicrophone, IconSend } from '@douyinfe/semi-icons';
+import { IconCopy, IconMicrophone, IconSend } from '@douyinfe/semi-icons';
 import { Button, Input, Spin } from '@douyinfe/semi-ui';
 import ClassNames from 'classnames';
 import { FC, useEffect, useMemo, useState } from 'react';
@@ -10,9 +10,11 @@ import {
   similaritySearchResponseItem,
 } from '../../api/conversation';
 import { similaritySearchFromDocs } from '../../api/project';
-import useBrowserSpeechToText from '../../hooks/BrowserSpeechToText';
+import useBrowserSpeechToText, {
+  SupportedLanguages,
+} from '../../hooks/BrowserSpeechToText';
 import { useTTSStore } from '../../store/tts';
-import { ToastInfo, ToastSuccess } from '../../utils/common';
+import { handleCopy, ToastInfo, ToastSuccess } from '../../utils/common';
 import Layout from '../Layout';
 import styles from './index.module.less';
 
@@ -22,14 +24,26 @@ interface ConversationProps {
 
 const Conversation: FC<ConversationProps> = ({ projectId }) => {
   const [loading, setLoading] = useState(false);
-  const language = 'zh-CN';
   const { transcript, isListening, setIsListening } = useBrowserSpeechToText({
-    language,
+    language: SupportedLanguages['zh-CN'],
   });
   const [chatList, setChatList] = useState<Partial<Message>[]>([
     {
+      content:
+        '我叫 JS Siri，是你的 AI 助理我叫 JS Siri，是你的 AI 助理我叫 JS Siri，是你的 AI 助理我叫 JS Siri，是你的 AI 助理我叫 JS Siri，是你的 AI 助理我叫 JS Siri，是你的 AI 助理',
+      role: MessageRole.system,
+    },
+    {
+      content: '我是小张',
+      role: MessageRole.human,
+    },
+    {
       content: '我叫 JS Siri，是你的 AI 助理',
       role: MessageRole.system,
+    },
+    {
+      content: '我是小张',
+      role: MessageRole.human,
     },
   ]);
   const [content, setContent] = useState('');
@@ -60,6 +74,29 @@ const Conversation: FC<ConversationProps> = ({ projectId }) => {
                   })}
                 >
                   {message.content}
+                </div>
+                <div
+                  className={ClassNames({
+                    [styles.messageControll]: true,
+                    [styles.systemControll]: message.role === MessageRole.system,
+                    [styles.aiControll]: message.role === MessageRole.ai,
+                    [styles.humanControll]: message.role === MessageRole.human,
+                  })}
+                >
+                  <Button
+                    icon={<IconMicrophone size="small" />}
+                    className={styles.sendBtn}
+                    onClick={() => speak(message.content as string)}
+                    size="small"
+                    disabled={loading}
+                  />
+                  <Button
+                    icon={<IconCopy size="small" />}
+                    className={styles.sendBtn}
+                    onClick={() => handleCopy(message.content as string)}
+                    size="small"
+                    disabled={loading}
+                  />
                 </div>
               </div>
             </div>
@@ -116,9 +153,7 @@ const Conversation: FC<ConversationProps> = ({ projectId }) => {
           { content: content, role: MessageRole.human },
         ];
         setChatList([...chatList, ...svaeMessages, result]);
-        ToastInfo('speech start debug');
         speech(result.content);
-        ToastSuccess('speech end debug');
       })
       .finally(() => {
         setContent('');
@@ -161,7 +196,7 @@ const Conversation: FC<ConversationProps> = ({ projectId }) => {
             size="small"
             disabled={loading}
           >
-            {isListening && <Spin />}
+            {isListening && <>录音中</>}
           </Button>
           <Button
             icon={<IconSend />}

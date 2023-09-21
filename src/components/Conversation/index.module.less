@@ -12,6 +12,7 @@
   .messageList {
     height: 300px;
     overflow-y: auto;
+    padding: 1rem 0 2rem 0;
     .message {
       display: flex;
 
@@ -20,6 +21,7 @@
         font-size: 1.2rem;
         width: 100%;
         margin: 1rem;
+        position: relative;
       }
 
       .messageTime {
@@ -51,6 +53,24 @@
       .humanContent {
         background-color: rgb(228, 239, 252);
         justify-content: flex-end;
+      }
+
+      .messageControll {
+        position: absolute;
+        display: flex;
+        gap: 5px;
+        bottom: -27px;
+        button {
+          border-radius: 5px;
+        }
+      }
+      .systemControll,
+      .aiControll {
+        left: 2px;
+      }
+
+      .humanControll {
+        right: 2px;
       }
     }
   }

@@ -3,7 +3,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ToastError } from '../utils/common';
 
 interface BrowserSpeechToTextProps {
-  language: string;
+  language: SupportedLanguages;
+}
+
+export enum SupportedLanguages {
+  'zh-CN' = 'zh-CN',
+  'en-US' = 'en-US',
 }
 
 const SpeechRecognition =
@@ -22,7 +27,7 @@ const useBrowserSpeechToText = ({ language }: BrowserSpeechToTextProps) => {
     if (recognition) {
       recognition.current.interimResults = true;
       recognition.current.continuous = true;
-      recognition.current.lang = 'zh-CN';
+      recognition.current.lang = SupportedLanguages['zh-CN'];
 
       // @ts-ignore
       recognition.current.onresult = (event: SpeechRecognitionEvent) => {

@@ -32,7 +32,7 @@ interface TTSStore {
 
 export const useTTSStore = createWithEqualityFn<TTSStore>(
   (set) => ({
-    voice: 'zh-CN-XiaoxiaoNeural',
+    voice: 'zh-CN-XiaochenNeural',
     voices: [],
     rate: 'medium',
     autoPlay: '0',
