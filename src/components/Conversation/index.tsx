@@ -15,7 +15,7 @@ import useBrowserSpeechToText, {
 } from '../../hooks/BrowserSpeechToText';
 import { useSettingStore } from '../../store/setting';
 import { useTTSStore } from '../../store/tts';
-import { handleCopy } from '../../utils/common';
+import { handleCopy, ToastWaring } from '../../utils/common';
 import { updateLive2dChatAnswer } from '../../utils/live2d';
 import Layout from '../Layout';
 import styles from './index.module.less';
@@ -26,10 +26,10 @@ const Conversation = () => {
     language: SupportedLanguages['zh-CN'],
   });
   const [chatList, setChatList] = useState<Partial<Message>[]>([
-    {
-      content: '我叫 JS Siri，是你的 AI 助理',
-      role: MessageRole.system,
-    },
+    // {
+    //   content: '我叫 JS Siri，是你的 AI 助理',
+    //   role: MessageRole.ai,
+    // },
   ]);
   const [content, setContent] = useState('');
   const speak = useTTSStore((state) => state.speak);
@@ -118,6 +118,11 @@ const Conversation = () => {
   };
 
   const sendMessage = async () => {
+    if (loading) return;
+    if (!content) {
+      ToastWaring('请输入内容');
+      return;
+    }
     setLoading(true);
     // prompt
     const humanContent = `${content}`;
@@ -126,9 +131,10 @@ const Conversation = () => {
       role: MessageRole.human,
     };
     const systemMessages = await docSearch();
-    const messages = [...chatList.slice(1), ...systemMessages, humanMessage].slice(
-      -setting.maxContext,
-    );
+    const chatHistory = [...chatList]
+      .filter((item) => item.role !== MessageRole.system)
+      .slice(-setting.maxContext);
+    const messages = [...chatHistory, ...systemMessages, humanMessage];
     const projectId = setting?.doc?.id;
     conversation({ messages, projectId })
       .then((res) => {
@@ -137,11 +143,10 @@ const Conversation = () => {
           role: MessageRole.ai,
         };
         const svaeMessages = [
-          ...chatList.slice(1),
-          ...systemMessages,
+          ...chatHistory,
           { content: content, role: MessageRole.human },
         ];
-        setChatList([...chatList, ...svaeMessages, result]);
+        setChatList([...svaeMessages, result]);
         const autoSpeech = setting.autoSpeech;
         if (autoSpeech) {
           speech(result.content);
@@ -179,6 +184,7 @@ const Conversation = () => {
             value={content}
             onChange={setContent}
             className={styles.sendInput}
+            onEnterPress={sendMessage}
           ></Input>
           <Button
             theme="solid"

@@ -1,9 +1,9 @@
 .chatComponent {
   padding-bottom: 4rem;
-  position: relative;
   height: 100%;
 }
 .chatComponent .header {
+  font-weight: 600;
   height: 3rem;
   padding: 0 2rem;
   border-bottom-width: 1px;
@@ -12,7 +12,8 @@
   border-style: solid;
 }
 .chatComponent .messageList {
-  height: 300px;
+  font-size: 1rem;
+  height: calc(100% - 3rem);
   overflow-y: auto;
   padding: 1rem 0 2rem 0;
 }
@@ -21,13 +22,9 @@
 }
 .chatComponent .messageList .message .messageContainer {
   display: flex;
-  font-size: 1.2rem;
   width: 100%;
   margin: 1rem;
   position: relative;
-}
-.chatComponent .messageList .message .messageTime {
-  font-size: 1rem;
 }
 .chatComponent .messageList .message .systemMessage,
 .chatComponent .messageList .message .aiMessage {
@@ -38,10 +35,8 @@
 }
 .chatComponent .messageList .message .messageContent {
   border-radius: 10px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
 }
 .chatComponent .messageList .message .systemContent,
 .chatComponent .messageList .message .aiContent {
@@ -56,7 +51,7 @@
   position: absolute;
   display: flex;
   gap: 5px;
-  bottom: -27px;
+  bottom: -12px;
 }
 .chatComponent .messageList .message .messageControll button {
   border-radius: 5px;

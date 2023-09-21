@@ -1,14 +1,13 @@
 import { IconList, IconSetting } from '@douyinfe/semi-icons';
 import { SideSheet } from '@douyinfe/semi-ui';
-import { useState } from 'react';
 
-import { AppState, useSettingStore } from '../../store/setting';
+import { useSettingStore } from '../../store/setting';
 import { Setting } from '../Setting';
 import { SiriMode } from '../Siri';
 import styles from './index.module.less';
 
 const Header = () => {
-  const { updateAppState, setting, updateSetting, settingVisible, updateSettingVisible } =
+  const { setting, updateSetting, settingVisible, updateSettingVisible } =
     useSettingStore();
   const siriMode = setting?.siriMode || false;
 
@@ -26,6 +25,7 @@ const Header = () => {
         onCancel={() => updateSettingVisible(false)}
         placement="right"
         height="100%"
+        width="100%"
       >
         <Setting />
       </SideSheet>

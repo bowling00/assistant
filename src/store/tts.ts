@@ -12,6 +12,7 @@ export type TTSRate = 'x-slow' | 'slow' | 'medium' | 'fast' | 'x-fast';
 
 const TTS_KEY = import.meta.env.VITE_AZURE_KEY || '';
 const TTS_REGION = import.meta.env.VITE_REGION || '';
+const PROXY_URL = import.meta.env.VITE_PROXY_URL || '';
 
 interface TTSStore {
   voice: string;
@@ -75,6 +76,7 @@ export const useTTSStore = createWithEqualityFn<TTSStore>(
             // config?.setProxy('https://proxy.devlink.wiki/', 443);
             if (!config) {
               config = SpeechConfig.fromSubscription(TTS_KEY, TTS_REGION);
+              config.setProxy(PROXY_URL, 443);
               set({ config });
             }
 

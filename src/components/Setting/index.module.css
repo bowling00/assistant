@@ -1,0 +1,47 @@
+.settingContainer {
+  padding: 20px;
+}
+.settingContainer .settingItem {
+  border-bottom: 1px solid rgba(28, 31, 35, 0.08);
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  grid-gap: 1rem;
+  height: 50px;
+  line-height: 50px;
+  align-items: center;
+}
+.settingContainer .settingItem .title {
+  font-weight: bold;
+}
+.settingContainer .settingItem .content {
+  font-weight: 400;
+}
+.settingContainer .settingItem .content .maxContext {
+  display: flex;
+  gap: 5px;
+}
+.settingContainer .settingItem .content .autoSpeech,
+.settingContainer .settingItem .content .siriControll {
+  display: flex;
+  align-items: center;
+}
+.settingContainer .settingItem .docContainer {
+  display: flex;
+  gap: 2rem;
+}
+.settingContainer .settingItem .docContainer .docOpenModal {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.docModalItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.docModalItem .title {
+  font-weight: 600;
+}
+.docModalItem .name {
+  font-weight: 400;
+}

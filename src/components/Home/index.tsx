@@ -7,15 +7,15 @@ import Layout from '../Layout';
 import styles from './index.module.less';
 
 const Home = () => {
-  const { updateAppState } = useSettingStore();
+  const { updateAppState, updateSettingVisible, setting, updateSetting } =
+    useSettingStore();
 
   const getCardContent = () => {
     return (
       <div className={styles.cardContent}>
         <div className={styles.cardContentTitle}>JS Siri</div>
         <div className={styles.cardContentdes}>
-          我是 AI Assistant，使用 gpt 3.5
-          模型，你也可以通过接入私有知识库，来提升我的知识面
+          我是 AI 助手，你可以连接私有知识库，为你打造专属的 Siri 体验
         </div>
       </div>
     );
@@ -24,9 +24,12 @@ const Home = () => {
   const getCardFooter = () => {
     return (
       <footer className={styles.cardFooter}>
-        <Button>设置</Button>
         <Button type="primary" theme="solid" onClick={gotoConversation}>
           开始对话
+        </Button>
+        <Button onClick={() => updateSettingVisible(true)}>设置</Button>
+        <Button onClick={() => updateSetting({ ...setting, siriMode: true })}>
+          Siri 模式
         </Button>
       </footer>
     );

@@ -142,7 +142,7 @@ export const Setting = () => {
         visible={docModalVisible}
         onCancel={() => setDocModalVisible(false)}
         closeOnEsc
-        width={400}
+        width={360}
         zIndex={99999}
       >
         <Form
