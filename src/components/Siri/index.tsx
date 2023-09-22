@@ -14,6 +14,7 @@ import useBrowserSpeechToText, {
 } from '../../hooks/BrowserSpeechToText';
 import { useSettingStore } from '../../store/setting';
 import { useTTSStore } from '../../store/tts';
+import { ToastWaring } from '../../utils/common';
 import { updateLive2dChatAnswer } from '../../utils/live2d';
 import styles from './index.module.less';
 
@@ -68,6 +69,10 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
 
   const sendMessage = async () => {
     if (loading) return;
+    if (!content) {
+      ToastWaring('请输入内容');
+      return;
+    }
     setLoading(true);
     const humanContent = `${content}`;
     const humanMessage = {
