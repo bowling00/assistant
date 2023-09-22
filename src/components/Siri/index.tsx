@@ -1,6 +1,6 @@
 import { IconMicrophone, IconSend } from '@douyinfe/semi-icons';
 import { Button, Input } from '@douyinfe/semi-ui';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import {
   conversation,
@@ -113,9 +113,15 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
     setIsListening(!isListening);
   };
 
-  // useEffect(() => {
-  //   setContent(transcript);
-  // }, [transcript]);
+  useEffect(() => {
+    setContent(transcript);
+  }, [transcript]);
+
+  useEffect(() => {
+    if (content) {
+      sendMessage();
+    }
+  }, [content]);
 
   return (
     <div className={styles.chatComponent}>

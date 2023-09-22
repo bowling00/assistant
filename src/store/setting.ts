@@ -46,7 +46,7 @@ export const useSettingStore = create<SettingStore>((set, get) => ({
     siriMode: false,
     autoSpeech: true,
     speech: SpeechList['zh-CN-XiaochenNeural'],
-    maxContext: 4,
+    maxContext: 6,
     doc: null,
   },
   settingVisible: false,
