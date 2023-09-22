@@ -378,3 +378,13 @@ template {
   background: slateblue;
   color: white;
 }
+
+@media screen and (max-width: 375px) {
+  #waifu-tips {
+    left: 0;
+    bottom: 320px;
+    max-height: 220px;
+    overflow-y: auto;
+    max-width: 80%;
+  }
+}
