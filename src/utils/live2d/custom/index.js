@@ -75,17 +75,17 @@ function loadWidget(config) {
       lastHoverElement;
     window.addEventListener('mousemove', () => (userAction = true));
     window.addEventListener('keydown', () => (userAction = true));
-    setInterval(() => {
-      if (userAction) {
-        userAction = false;
-        clearInterval(userActionTimer);
-        userActionTimer = null;
-      } else if (!userActionTimer) {
-        userActionTimer = setInterval(() => {
-          showMessage(messageArray, 6000, 9);
-        }, 20000);
-      }
-    }, 1000);
+    // setInterval(() => {
+    //   if (userAction) {
+    //     userAction = false;
+    //     clearInterval(userActionTimer);
+    //     userActionTimer = null;
+    //   } else if (!userActionTimer) {
+    //     userActionTimer = setInterval(() => {
+    //       showMessage(messageArray, 6000, 9);
+    //     }, 20000);
+    //   }
+    // }, 1000);
     showMessage(welcomeMessage(result.time), 7000, 11);
     window.addEventListener('mouseover', (event) => {
       return;
