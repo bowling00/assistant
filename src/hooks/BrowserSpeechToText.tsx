@@ -27,7 +27,7 @@ const useBrowserSpeechToText = ({ language }: BrowserSpeechToTextProps) => {
     if (recognition) {
       recognition.current.interimResults = true;
       recognition.current.continuous = true;
-      recognition.current.lang = SupportedLanguages['zh-CN'];
+      recognition.current.lang = language;
 
       // @ts-ignore
       recognition.current.onresult = (event: SpeechRecognitionEvent) => {

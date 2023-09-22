@@ -1,7 +1,6 @@
-import { IconCopy, IconMicrophone, IconSend } from '@douyinfe/semi-icons';
-import { Button, Input, Spin } from '@douyinfe/semi-ui';
-import ClassNames from 'classnames';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { IconMicrophone, IconSend } from '@douyinfe/semi-icons';
+import { Button, Input } from '@douyinfe/semi-ui';
+import { FC, useState } from 'react';
 
 import {
   conversation,
@@ -13,11 +12,9 @@ import { similaritySearchFromDocs } from '../../api/project';
 import useBrowserSpeechToText, {
   SupportedLanguages,
 } from '../../hooks/BrowserSpeechToText';
+import { useSettingStore } from '../../store/setting';
 import { useTTSStore } from '../../store/tts';
-import { handleCopy } from '../../utils/common';
 import { updateLive2dChatAnswer } from '../../utils/live2d';
-import Layout from '../Layout';
-// import styles from './index.module.less';
 import styles from './index.module.less';
 
 interface SiriModeProps {
@@ -25,7 +22,6 @@ interface SiriModeProps {
 }
 
 export const SiriMode: FC<SiriModeProps> = (props) => {
-  const { projectId } = props;
   const [loading, setLoading] = useState(false);
   const { transcript, isListening, setIsListening } = useBrowserSpeechToText({
     language: SupportedLanguages['zh-CN'],
@@ -37,15 +33,19 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
     },
   ]);
   const [content, setContent] = useState('');
-  const size = 2;
   const speak = useTTSStore((state) => state.speak);
+  const { setting } = useSettingStore();
 
   const docSearch = async () => {
-    if (!projectId) return [];
-
+    const id = setting?.doc?.id;
+    const name = setting?.doc?.name;
+    if (!id && !name) {
+      return [];
+    }
+    const size = 2;
     const searchVectorFromDocsFunc = (): Promise<similaritySearchResponseItem[]> => {
       return new Promise((resolve) => {
-        similaritySearchFromDocs({ content, projectId, size })
+        similaritySearchFromDocs({ content, projectId: id as string, size })
           .then((res) => {
             resolve(res.data);
           })
@@ -67,28 +67,34 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
   };
 
   const sendMessage = async () => {
+    if (loading) return;
     setLoading(true);
-    // prompt
     const humanContent = `${content}`;
     const humanMessage = {
       content: humanContent,
       role: MessageRole.human,
     };
     const systemMessages = await docSearch();
-    const messages = [...chatList.slice(1), ...systemMessages, humanMessage];
-    conversation({ messages })
+    const chatHistory = [...chatList.slice(1)]
+      .filter((item) => item.role !== MessageRole.system)
+      .slice(-setting.maxContext);
+    const messages = [...chatHistory, ...systemMessages, humanMessage];
+    const projectId = setting?.doc?.id;
+    conversation({ messages, projectId })
       .then((res) => {
         const result = {
           content: res.data,
           role: MessageRole.ai,
         };
-        // const svaeMessages = [
-        //   ...chatList.slice(1),
-        //   ...systemMessages,
-        //   { content: content, role: MessageRole.human },
-        // ];
-        // setChatList([...chatList, ...svaeMessages, result]);
-        speech(result.content);
+        const svaeMessages = [
+          ...chatHistory,
+          { content: content, role: MessageRole.human },
+        ];
+        setChatList([...svaeMessages, result]);
+        const autoSpeech = setting.autoSpeech;
+        if (autoSpeech) {
+          speech(result.content);
+        }
         updateLive2dChatAnswer(result.content);
       })
       .finally(() => {
@@ -121,7 +127,6 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
           className={styles.sendInput}
         ></Input>
         <Button
-          icon={<IconMicrophone />}
           theme="solid"
           onClick={speechToText}
           // loading={isListening}
@@ -129,6 +134,7 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
           size="small"
           disabled={loading}
         >
+          <IconMicrophone />
           {isListening && <>录音中</>}
         </Button>
         <Button

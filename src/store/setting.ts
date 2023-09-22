@@ -62,7 +62,6 @@ export const useSettingStore = create<SettingStore>((set, get) => ({
   },
 
   updateSetting: (setting) => {
-    console.log('setting>>>>', setting);
     set({ setting });
 
     if (setting.siriMode) {

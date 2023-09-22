@@ -1,9 +1,9 @@
-import { Button, Form, Modal, Popover, Switch } from '@douyinfe/semi-ui';
+import { Button, Form, Input, Modal, Popover, Switch } from '@douyinfe/semi-ui';
 import { useState } from 'react';
 
 import { getProjectDetail } from '../../api/project';
 import { DocIF, useSettingStore } from '../../store/setting';
-import { ToastSuccess } from '../../utils/common';
+import { ToastError, ToastSuccess, ToastWaring } from '../../utils/common';
 import styles from './index.module.less';
 
 interface DocModal {
@@ -15,25 +15,31 @@ export const Setting = () => {
   const { siriMode, autoSpeech, speech, maxContext, doc } = setting;
   const [docModalVisible, setDocModalVisible] = useState(false);
   const [docModalLoading, setDocModalLoading] = useState(false);
-
+  const [maxContentInputValue, setMaxContentInputValue] = useState(maxContext);
   const docBindHandle = (values: DocModal) => {
     const { projectId } = values;
     setDocModalLoading(true);
     getProjectDetail(projectId)
       .then((res) => {
-        console.log(res.data);
-        const { id, description, name } = res.data;
-        const doc: DocIF = {
-          id,
-          description,
-          name,
-        };
-        updateSetting({
-          ...setting,
-          doc,
-        });
-        setDocModalVisible(false);
-        ToastSuccess('绑定成功');
+        if (res.data) {
+          const { id, description, name } = res.data;
+          const doc: DocIF = {
+            id,
+            description,
+            name,
+          };
+          updateSetting({
+            ...setting,
+            doc,
+          });
+          setDocModalVisible(false);
+          ToastSuccess('绑定成功');
+        } else {
+          return Promise.reject(res);
+        }
+      })
+      .catch(() => {
+        ToastError('绑定失败，未查询到该应用');
       })
       .finally(() => {
         setDocModalLoading(false);
@@ -45,6 +51,19 @@ export const Setting = () => {
       ...setting,
       doc: null,
     });
+    ToastSuccess('解绑成功');
+  };
+
+  const updateMaxContentInputValue = () => {
+    if (maxContentInputValue > 10 || maxContentInputValue < 1) {
+      ToastWaring('最小为1，最大为10');
+      return;
+    }
+    updateSetting({
+      ...setting,
+      maxContext: maxContentInputValue,
+    });
+    ToastSuccess('修改成功');
   };
   return (
     <>
@@ -62,9 +81,11 @@ export const Setting = () => {
                 <Button size="small" onClick={() => setDocModalVisible(true)}>
                   绑定
                 </Button>
-                <Button size="small" type="warning" onClick={unbindDoc}>
-                  解绑
-                </Button>
+                {doc?.name && (
+                  <Button size="small" type="warning" onClick={unbindDoc}>
+                    解绑
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -94,7 +115,7 @@ export const Setting = () => {
           </div>
         </div>
         <div className={styles.settingItem}>
-          <div className={styles.title}>选择朗读的声音</div>
+          <div className={styles.title}>朗读的声音</div>
           <div className={styles.content}>
             <div className={styles.speechList}>{speech}</div>
           </div>
@@ -103,8 +124,14 @@ export const Setting = () => {
           <div className={styles.title}>最长上下文条数</div>
           <div className={styles.content}>
             <div className={styles.maxContext}>
-              {maxContext}
-              <Button>修改</Button>
+              <Input
+                defaultValue={maxContentInputValue}
+                onChange={(v) => setMaxContentInputValue(Number(v))}
+                max={10}
+                min={1}
+                placeholder={'最小为1，最大为10'}
+              />
+              <Button onClick={updateMaxContentInputValue}>修改</Button>
             </div>
           </div>
         </div>
@@ -115,7 +142,7 @@ export const Setting = () => {
         visible={docModalVisible}
         onCancel={() => setDocModalVisible(false)}
         closeOnEsc
-        width={400}
+        width={360}
         zIndex={99999}
       >
         <Form
@@ -128,20 +155,24 @@ export const Setting = () => {
             <>
               <Form.Input
                 field="projectId"
-                label="知识库 ID"
+                label="应用 ID"
                 initValue={doc?.id || ''}
                 style={{ width: '100%' }}
-                placeholder="请输入知识库 ID"
-                rules={[{ required: true, message: '请输入知识库 ID' }]}
+                placeholder="请输入应用 ID"
+                rules={[{ required: true, message: '请输入应用 ID' }]}
               ></Form.Input>
               <div className={styles.docModalItem}>
-                <div className={styles.title}>知识库名字</div>
+                <div className={styles.title}>如何拥有应用 ID ?</div>
                 <div className={styles.name}>
-                  <Popover content={doc?.description}>
-                    {docModalLoading
-                      ? '绑定中...'
-                      : doc?.name || '输入知识库 ID 后点击绑定进行查询'}
-                  </Popover>
+                  请在
+                  <a
+                    href="https://docs-copilot.devlink.wiki/"
+                    target="_black"
+                    style={{ fontWeight: 600, margin: '0 .5rem' }}
+                  >
+                    docs-copilot
+                  </a>
+                  中创建「应用」和「知识库」，并在应用中绑定知识库
                 </div>
               </div>
               <div

@@ -1,0 +1,11 @@
+.LayoutContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.LayoutContainer .layoutContent {
+  height: calc(100% - 3rem);
+  background-color: white;
+  border-top-left-radius: 1.2rem;
+  border-top-right-radius: 1.2rem;
+}
