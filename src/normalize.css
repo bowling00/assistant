@@ -366,8 +366,8 @@ template {
 }
 
 #waifu-tips {
-  position: absolute;
-  opacity: 1;
+  position: absolute !important;
+  opacity: 1 !important;
   /* left: 300px; */
   width: unset;
   min-width: 250px;
