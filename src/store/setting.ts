@@ -70,7 +70,7 @@ export const useSettingStore = create<SettingStore>((set, get) => ({
       hideLive2dGirls();
     }
     const cache = {
-      setting,
+      setting: get().setting,
       settingVisible: get().settingVisible,
     };
     setCache(cache);
