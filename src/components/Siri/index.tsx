@@ -43,10 +43,11 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
     if (!id && !name) {
       return [];
     }
+    const _content = content || transcript;
     const size = 2;
     const searchVectorFromDocsFunc = (): Promise<similaritySearchResponseItem[]> => {
       return new Promise((resolve) => {
-        similaritySearchFromDocs({ content, projectId: id as string, size })
+        similaritySearchFromDocs({ content: _content, projectId: id as string, size })
           .then((res) => {
             resolve(res.data);
           })
@@ -69,12 +70,13 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
 
   const sendMessage = async () => {
     if (loading) return;
-    if (!content) {
+    const _content = content || transcript;
+    if (!_content) {
       ToastWaring('请输入内容');
       return;
     }
     setLoading(true);
-    const humanContent = `${content}`;
+    const humanContent = `${_content}`;
     const humanMessage = {
       content: humanContent,
       role: MessageRole.human,
@@ -120,13 +122,10 @@ export const SiriMode: FC<SiriModeProps> = (props) => {
 
   useEffect(() => {
     setContent(transcript);
-  }, [transcript]);
-
-  useEffect(() => {
-    if (content) {
+    if (transcript) {
       sendMessage();
     }
-  }, [content]);
+  }, [transcript]);
 
   return (
     <div className={styles.chatComponent}>
