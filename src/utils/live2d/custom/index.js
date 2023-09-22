@@ -48,7 +48,7 @@ function loadWidget(config) {
         }
       }
     }
-    const text = `我是吉丝儿，使用 gpt 3.5 模型，你也可以通过接入私有知识库，来提升我的知识面`;
+    const text = `我是JS Siri，可以连接私有知识库，为你打造专属的 Siri 体验`;
     let from;
     if (document.referrer !== '') {
       const referrer = new URL(document.referrer),
