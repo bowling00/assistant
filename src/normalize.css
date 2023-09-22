@@ -361,12 +361,14 @@ template {
   visibility: hidden;
   z-index: 10000;
   width: 100vw;
+  display: flex;
+  justify-content: center;
 }
 
 #waifu-tips {
   position: absolute;
   opacity: 1;
-  left: 300px;
+  /* left: 300px; */
   width: unset;
   min-width: 250px;
   max-width: 60%;
@@ -381,7 +383,6 @@ template {
 
 @media screen and (max-width: 375px) {
   #waifu-tips {
-    left: 0;
     bottom: 320px;
     max-height: 220px;
     overflow-y: auto;
